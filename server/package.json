@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "directus": "^9.5.0",
+    "next-absolute-url": "^1.2.2",
     "sqlite3": "^5.0.2"
   }
 }
