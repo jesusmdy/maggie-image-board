@@ -8,13 +8,20 @@ import {
   ModalContent,
   useDisclosure,
   useBoolean,
-  Heading
+  Heading,
+  Divider,
+  Wrap,
+  Container,
+  VStack,
+  Grid,
+  GridItem,
+  SimpleGrid
 } from "@chakra-ui/react"
 import MainLayout from "components/MainLayout"
 import absoluteUrl from "next-absolute-url"
 import Head from "next/head"
 import Link from "next/link"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import ReackMarkdown from "react-markdown"
 import styles from "styles/bookPage"
 
@@ -40,17 +47,21 @@ function ImageModal({image, isOpen, onClose}) {
 
 function ImageItem({image}) {
   const {isOpen, onOpen, onClose} = useDisclosure()
-  const imageBox = useRef()
-  const doScroll = ({target}) => {
-    target.scrollIntoView()
-  }
+  const [horizontal, setHorizontal] = useState(false)
+  const imgRef = useRef()
+  useEffect(() => {
+    const {current: img} = imgRef
+    if(img?.width > img?.height) setHorizontal(true)
+  }, [imgRef])
   return (
-    <Box {...styles.imageItem} ref={imageBox} onClick={doScroll}>
+    <Box p={2}>
       <Img
-        src={image.original}
+        ref={imgRef}
+        src={image.mediumCropped}
         loading="lazy"
         cursor="zoom-in"
         onClick={onOpen}
+        rounded={4}
       />
       <ImageModal
         image={image}
@@ -61,55 +72,54 @@ function ImageItem({image}) {
   )
 }
 
-function ExpandableOverlay({onOpen}) {
-  return (
-    <Box {...styles.expandibleOverlay}>
-      <Button {...styles.expandButton} onClick={onOpen}>See All</Button>
-    </Box>
-  )
-}
-
 function ExpandableSection({book}) {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const { images } = book
   return (
     <Box
       maxH={isOpen ? 'auto' : '2xl'}
-      my={2}
       borderColor="gray.200"
-      rounded={8}
       overflow="hidden"
       position="relative"
-      boxShadow="rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;"
+      p={4}
     >
-      {
-        images.map((image, n) => <ImageItem key={n} image={image} />)
-      }
-      {
-        !isOpen &&
-        <ExpandableOverlay onOpen={onOpen} />
-      }
+      <SimpleGrid
+        columns={{
+          sm: 1,
+          md: 2,
+          lg: 4,
+          xl: 6
+        }}
+      >
+        {
+          images.map((image, n) => <ImageItem key={n} image={image} />)
+        }
+      </SimpleGrid>
     </Box>
   )
 }
 
 function BookContent({book}) {
-  const { title, content, tags } = book
+  const { title, content } = book
   return (
     <Box p={8}>
-      <Heading>{book.title}</Heading>
-      <ReackMarkdown children={book.content} />
-      <Box as="ul">
-        {
-          tags.map((tag, n) => (
-            <li key={n} style={styles.tagsStyle}>
-              <Link href={`/tags/${tag}`}>
-                <a style={{ display: 'block' }} as="a">{tag}</a>
-              </Link>
-            </li>
-          ))
-        }
-      </Box>
+      <SimpleGrid
+        columns={{
+          sm: 1,
+          md: 2
+        }}
+      >
+        <Box>
+          <Heading fontSize="2xl" color="gray.600">Book</Heading>
+          <Heading>{title}</Heading>
+          <ReackMarkdown children={content} />
+        </Box>
+        <Box>
+          <Heading fontSize="2xl" color="gray.600">
+            Comments
+          </Heading>
+        </Box>
+      </SimpleGrid>
     </Box>
   )
 }
@@ -121,15 +131,13 @@ export default function Book({book}) {
         <title>ImageBoard / {book.title}</title>
       </Head>
       <MainLayout>
-        <Flex>
-          <Box flex={1}>
+        <VStack>
+          <Container {...styles.contentBox} maxW="container.xl">
             <ExpandableSection book={book} />
+            <Divider />
             <BookContent book={book} />
-          </Box>
-          <Box w="xs">
-            lorem
-          </Box>
-        </Flex>
+          </Container>
+        </VStack>
       </MainLayout>
     </>
   )
