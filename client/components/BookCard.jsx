@@ -1,39 +1,41 @@
-import {Avatar, Box, Flex, HStack, Icon, Image, ScaleFade, Text} from "@chakra-ui/react"
-import { CopyIcon } from '@chakra-ui/icons'
-import sdk from "sdk"
+import { Avatar, Box, Flex, Img, Tag, Text } from "@chakra-ui/react"
 import Link from "next/link"
 
-export default function BookCard({book}) {
-  const {title, images, author, id} = book
-  const preview = images[0].mediumCropped
-  const fallback = images[0].tiny
+const unsafeBadgeStyles = {
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  m: 4,
+  colorScheme: 'red',
+  size: 'sm',
+  variant: 'solid'
+}
+
+export default function BookCard({book, showLabel = true}) {
+  const { id, images, title, author, nsfw, bookUrl } = book
+  const { displayName, avatar } = author
+  const preview = images[0].smallCropped
   return (
-    <ScaleFade in={true}>
-      <Box
-        boxSize="xs"
-        border="2px"
-        borderColor="gray.100"
-        rounded={8}
-        as="li"
-        backgroundImage={preview}
-        backgroundPosition="center"
-        backgroundSize="100% auto"
-      >
-        <Link href={`/books/${id}`}>
-          <Box as="a" display="block" position="relative" p={2} h="xs">
-            <img style={{
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: '100%',
-              height: '100%',
-              opacity: 0
-            }} src={preview} alt={title} />
-          </Box>
-        </Link>
-      </Box>
-    </ScaleFade>
+    <Link href={bookUrl}>
+      <a>
+        <Box position="relative" rounded={4} p={2} _hover={{ bgColor: "gray.50" }} >
+          {
+            nsfw &&
+            <Tag {...unsafeBadgeStyles}>NSFW</Tag>
+          }
+          <Img src={preview} rounded={8} />
+          {
+            showLabel &&
+            <>
+              <Text fontWeight="bold" isTruncated>{title}</Text>
+              <Flex my={2}>
+                <Avatar colorScheme="cyan" size="xs" src={avatar} name={displayName} />
+                <Text fontSize="sm" color="gray.600" ml={2} flex={1}>{displayName}</Text>
+              </Flex>
+            </>
+          }
+        </Box>
+      </a>
+    </Link>
   )
 }

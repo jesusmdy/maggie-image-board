@@ -1,6 +1,5 @@
 import sdk from 'sdk'
-
-const defaultAvatar = `https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png`
+import { normalizeUser } from './normalizeUser'
 
 export function createImageUrl(imgId, key) {
   const {url} = sdk
@@ -56,16 +55,12 @@ export function normalizeGQLBook(book) {
     tags,
     user_created
   } = book
-  const {first_name, last_name, avatar, id: userId} = user_created
-  const author = {
-    id: userId,
-    displayName: `${first_name.trim()} ${last_name.trim()}`,
-    avatar: avatar && createImageUrl(avatar.id, 'small') || defaultAvatar
-  }
+  const author = normalizeUser(user_created)
   const images = normalizeImages(_images)
-
+  const bookUrl = `/books/${id}`
   return {
     id,
+    bookUrl,
     title,
     content,
     images,

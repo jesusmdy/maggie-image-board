@@ -13,6 +13,7 @@ import {
   SimpleGrid
 } from "@chakra-ui/react"
 import getBook from "apollo/getBook"
+import CommentElement from "components/CommentElement"
 import MainLayout from "components/MainLayout"
 import Head from "next/head"
 import { useEffect, useRef, useState } from "react"
@@ -94,7 +95,7 @@ function ExpandableSection({book}) {
 }
 
 function BookContent({book}) {
-  const { title, content } = book
+  const { title, content, comments } = book
   return (
     <Box p={6}>
       <SimpleGrid
@@ -112,6 +113,10 @@ function BookContent({book}) {
           <Heading fontSize="2xl" color="gray.600">
             Comments
           </Heading>
+          {
+            comments &&
+            comments.map((comment, n) => <CommentElement key={n} comment={comment} />)
+          }
         </Box>
       </SimpleGrid>
     </Box>

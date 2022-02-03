@@ -1,10 +1,21 @@
 import { gql } from '@apollo/client'
 
 const query = gql`
-  query($page: Int!) {
-    book(page: $page) {
+  query(
+      $page: Int!, 
+      $sort: [String!],
+      $filter: book_filter!,
+      $limit: Int!
+    ) {
+    book(
+      page: $page,
+      sort: $sort,
+      filter: $filter,
+      limit: $limit
+    ) {
       id,
       title,
+      nsfw,
       content,
       tags,
       user_created {
