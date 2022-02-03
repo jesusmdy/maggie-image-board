@@ -1,9 +1,10 @@
 import { Box, Heading, HStack, Text, Wrap } from '@chakra-ui/react'
 import BookCard from 'components/BookCard'
 import MainLayout from 'components/MainLayout'
-import absoluteUrl from 'next-absolute-url'
+import getBooks from 'apollo/getBooks'
 
 export default function Index({books}) {
+  console.log(books);
   if(!books) return <NoPosts />
   return (
     <MainLayout>
@@ -37,15 +38,12 @@ function NoPosts() {
 }
 
 export async function getServerSideProps(context) {
-  const {req} = context
-  const {origin} = absoluteUrl(req)
-  const booksQuery = await fetch(`${origin}/api/books`)
-  if(booksQuery.ok) {
-    const books = await booksQuery.json()
+  try {
+    const books = await getBooks()
     return {
-      props: { books }
+      props: {books}
     }
-  } else {
+  } catch(e) {
     return {
       props: {}
     }

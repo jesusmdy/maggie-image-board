@@ -1,8 +1,6 @@
 import {
   Box,
   Img,
-  Button,
-  Flex,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -10,17 +8,13 @@ import {
   useBoolean,
   Heading,
   Divider,
-  Wrap,
   Container,
   VStack,
-  Grid,
-  GridItem,
   SimpleGrid
 } from "@chakra-ui/react"
+import getBook from "apollo/getBook"
 import MainLayout from "components/MainLayout"
-import absoluteUrl from "next-absolute-url"
 import Head from "next/head"
-import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import ReackMarkdown from "react-markdown"
 import styles from "styles/bookPage"
@@ -102,7 +96,7 @@ function ExpandableSection({book}) {
 function BookContent({book}) {
   const { title, content } = book
   return (
-    <Box p={8}>
+    <Box p={6}>
       <SimpleGrid
         columns={{
           sm: 1,
@@ -125,6 +119,7 @@ function BookContent({book}) {
 }
 
 export default function Book({book}) {
+  if (!book) return <MainLayout>Not found</MainLayout>
   return (
     <>
       <Head>
@@ -145,15 +140,13 @@ export default function Book({book}) {
 
 export async function getServerSideProps(context) {
   const { req, query } = context
-  const {bookID} = query
-  const {origin} = absoluteUrl(req)
-  const bookQuery = await fetch(`${origin}/api/books/${bookID}`)
-  if(bookQuery.ok) {
-    const book = await bookQuery.json()
+  const { bookID } = query
+  try {
+    const book = await getBook(bookID)
     return {
       props: { book }
     }
-  } else {
+  } catch(e) {
     return {
       props: {}
     }
