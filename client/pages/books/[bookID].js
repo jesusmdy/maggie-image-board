@@ -19,6 +19,7 @@ import {
 import getBook from "apollo/getBook"
 import CommentElement from "components/CommentElement"
 import MainLayout from "components/MainLayout"
+import RecentWorks from "components/recentWorks"
 import Head from "next/head"
 import { useEffect, useRef, useState } from "react"
 import ReackMarkdown from "react-markdown"
@@ -168,6 +169,8 @@ function BookContent({book}) {
 }
 
 export default function Book({book}) {
+  const { author } = book
+  const { id: userId } = author
   if (!book) return <MainLayout>Not found</MainLayout>
   return (
     <>
@@ -179,6 +182,7 @@ export default function Book({book}) {
           rounded={8}
           shadow="md"
           columns={{ sm: 1, md: 2}}
+          pb={8}
         >
           <Box>
             <BookImages book={book} />
@@ -186,6 +190,7 @@ export default function Book({book}) {
           </Box>
           <Box>
             <BookContent book={book} />
+            <RecentWorks userId={userId} />
           </Box>
         </SimpleGrid>
       </MainLayout>
