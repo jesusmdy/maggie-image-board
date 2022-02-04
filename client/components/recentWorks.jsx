@@ -42,7 +42,7 @@ export default function RecentWorks({userId}) {
   }, [userId])
   return (
     <Box
-      bgColor="gray.100"
+      bgColor="rgba(25 25 25 / 2%)"
       p={4}
       mx={6}
       rounded={8}
@@ -54,6 +54,7 @@ export default function RecentWorks({userId}) {
           md: 2,
           lg: 4
         }}
+        gap={2}
       >
         {
           recent &&

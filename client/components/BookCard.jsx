@@ -6,10 +6,10 @@ const unsafeBadgeStyles = {
   position: 'absolute',
   left: 0,
   top: 0,
-  m: 4,
+  m: 2,
   colorScheme: 'red',
   size: 'sm',
-  variant: 'solid'
+  variant: 'solid',
 }
 
 function BookCardAuthorLabel({author}) {
@@ -55,16 +55,14 @@ export default function BookCard({book, showLabel = true}) {
       <Box
         as="a"
         position="relative"
-        rounded={4}
-        _hover={{ bgColor: "gray.50" }}
+        rounded={8}
+        _hover={{ bgColor: "gray.100" }}
       >
         {
           nsfw &&
           <Tag {...unsafeBadgeStyles}>NSFW</Tag>
         }
-        <Box p={2}>
-          <Img src={preview} rounded={8} />
-        </Box>
+        <Img src={preview} rounded={8} />
         {
           showLabel &&
           <BookCardLabel book={book} />

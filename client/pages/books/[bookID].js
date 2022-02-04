@@ -16,7 +16,8 @@ import {
   Tag,
   Divider,
   HStack,
-  Wrap
+  Wrap,
+  TagLabel
 } from "@chakra-ui/react"
 import getBook from "apollo/getBook"
 import CommentElement from "components/CommentElement"
@@ -93,10 +94,11 @@ function AddCommentBox({book}) {
       <Flex>
         <Textarea
           mr={4}
-          colorScheme="gray"
+          bg="white"
           placeholder="Add comment"
           rounded={8}
           rows={2}
+          border="none"
         />
         <Button
           colorScheme="messenger"
@@ -111,8 +113,8 @@ function AddCommentBox({book}) {
 function CommentsSection({book}) {
   const { comments } = book
   return (
-    <Box p={6}>
-      <Heading fontSize="2xl" color="gray.600">
+    <Box p={6} bg="rgba(25 25 25 / 2%)" my={4} rounded={8}>
+      <Heading fontSize="2xl" color="gray.500">
         Comments
       </Heading>
       <AddCommentBox book={book} />
@@ -175,7 +177,11 @@ function TagsSection({tags}) {
                 <Tag
                   as="a"
                   mr={2}
-                >{tag}</Tag>
+                  colorScheme="blue"
+                  size="sm"
+                >
+                  <TagLabel>{tag}</TagLabel>
+                </Tag>
               </Link>
             ))
           }
@@ -210,17 +216,23 @@ export default function Book({book}) {
       <MainLayout>
         <SimpleGrid
           rounded={8}
-          shadow="md"
           columns={{ sm: 1, md: 2}}
-          pb={8}
+          rows={{ sm: 2, md: 2 }}
         >
-          <Box>
+          <Box
+            bg="white"
+            border="1px"
+            borderColor="gray.100"
+            rounded={8}
+          >
             <BookImages book={book} />
-            <CommentsSection book={book} />
           </Box>
           <Box>
             <BookContent book={book} />
             <RecentWorks userId={userId} />
+          </Box>
+          <Box>
+            <CommentsSection book={book} />
           </Box>
         </SimpleGrid>
       </MainLayout>
@@ -229,7 +241,7 @@ export default function Book({book}) {
 }
 
 export async function getServerSideProps(context) {
-  const { req, query } = context
+  const { query } = context
   const { bookID } = query
   try {
     const book = await getBook(bookID)

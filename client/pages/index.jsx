@@ -1,11 +1,21 @@
-import { Box, Heading, HStack, SimpleGrid, Text, Wrap } from '@chakra-ui/react'
+import { Box, Divider, Heading, HStack, SimpleGrid, Text, Wrap } from '@chakra-ui/react'
 import BookCard from 'components/BookCard'
 import MainLayout from 'components/MainLayout'
 import getBooks from 'apollo/getBooks'
 import Head from 'next/head';
 
+const styles = {
+  headingBoxStyle: {
+    py: 8
+  },
+  headingStyle: {
+    userSelect: 'none',
+    fontWeight: 'light',
+    color: 'gray.500'
+  }
+}
+
 export default function Index({books}) {
-  console.log(books);
   if(!books) return <NoPosts />
   return (
     <>
@@ -13,21 +23,17 @@ export default function Index({books}) {
         <title>ImageBoard / Images</title>
       </Head>
       <MainLayout>
-        <Box my={4} borderBottom="2px" borderColor="gray.100">
-          <Heading
-            my={2}
-            fontSize="3xl"
-            color="gray.600"
-            userSelect="none"
-          >Image books</Heading>
+        <Box {...styles.headingBoxStyle}>
+          <Heading {...styles.headingStyle}>Recent books for you</Heading>
         </Box>
         <SimpleGrid
           columns={{
-            sm: 1,
+            sm: 2,
             md: 2,
             lg: 4,
             xl: 6
           }}
+          gap={4}
         >
           {
             books.map(book => (
@@ -51,7 +57,6 @@ function NoPosts() {
 export async function getServerSideProps(context) {
   try {
     const books = await getBooks({})
-    console.log(books);
     return {
       props: {books}
     }

@@ -1,19 +1,41 @@
-import { Box, Container, Flex, Heading, HStack, Spacer, Text, VStack, Button } from "@chakra-ui/react";
+import { SearchIcon } from "@chakra-ui/icons";
+import { Box, Container, Flex, Heading, HStack, Spacer, Text, VStack, Button, Input, InputGroup, InputLeftElement, InputRightElement } from "@chakra-ui/react";
 import Link from "next/link"
 
 const navbarStyles = {
-  rounded: 8,
-  border: "2px",
-  borderColor: 'gray.200'
+  bg: 'white',
+  borderBottom: '1px',
+  borderColor: 'gray.100',
+  position: 'sticky',
+  top: 0,
+  zIndex: 1
+}
+
+function SearchBox() {
+  return (
+    <Box p={2} w="lg">
+      <InputGroup>
+        <InputRightElement>
+          <SearchIcon />
+        </InputRightElement>
+        <Input
+          variant="filled"
+          placeholder="Search books, tags and users"
+        />
+      </InputGroup>
+    </Box>
+  )
 }
 
 export function Navbar() {
   return (
-    <Box my={4} {...navbarStyles}>
-      <Flex>
+    <Box {...navbarStyles}>
+      <Flex maxW="container.xl" mx="auto" p={2}>
         <Link href="/" passHref>
           <Heading display="block" fontSize="lg" as="a" p={4}>ImageBoard</Heading>
         </Link>
+        <Spacer />
+        <SearchBox />
         <Spacer />
         <Box p={2}>
           <HStack>
@@ -32,11 +54,11 @@ export function Navbar() {
 
 export default function MainLayout({children}) {
   return (
-    <VStack>
-      <Container maxW="container.xl">
-        <Navbar />
+    <>
+      <Navbar />
+      <Container maxW="container.xl" my={4}>
         {children}
       </Container>
-    </VStack>
+    </>
   )
 }

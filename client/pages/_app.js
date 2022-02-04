@@ -6,6 +6,13 @@ import '@fontsource/outfit/400.css'
 import '../styles/globals.css'
 
 const theme = extendTheme({
+  styles: {
+    global: {
+      body: {
+        bg: 'gray.50'
+      }
+    }
+  },
   fonts: {
     heading: 'Outfit',
     body: 'Lato'
