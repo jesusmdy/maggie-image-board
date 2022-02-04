@@ -7,10 +7,14 @@ import {
   useDisclosure,
   useBoolean,
   Heading,
-  Divider,
-  Container,
-  VStack,
-  SimpleGrid
+  Flex,
+  SimpleGrid,
+  Avatar,
+  Button,
+  Textarea,
+  Text,
+  Center,
+  Divider
 } from "@chakra-ui/react"
 import getBook from "apollo/getBook"
 import CommentElement from "components/CommentElement"
@@ -42,16 +46,9 @@ function ImageModal({image, isOpen, onClose}) {
 
 function ImageItem({image}) {
   const {isOpen, onOpen, onClose} = useDisclosure()
-  const [horizontal, setHorizontal] = useState(false)
-  const imgRef = useRef()
-  useEffect(() => {
-    const {current: img} = imgRef
-    if(img?.width > img?.height) setHorizontal(true)
-  }, [imgRef])
   return (
-    <Box p={2}>
+    <Box>
       <Img
-        ref={imgRef}
         src={image.mediumCropped}
         loading="lazy"
         cursor="zoom-in"
@@ -67,58 +64,105 @@ function ImageItem({image}) {
   )
 }
 
-function ExpandableSection({book}) {
-  const { isOpen, onClose, onOpen } = useDisclosure()
+function BookImages({book}) {
   const { images } = book
   return (
-    <Box
-      maxH={isOpen ? 'auto' : '2xl'}
-      borderColor="gray.200"
-      overflow="hidden"
-      position="relative"
-      p={4}
+    <SimpleGrid
+      m={6}
+      gap={2}
+      columns={{
+        sm: 1,
+        md: 2,
+        lg: 4
+      }}
     >
-      <SimpleGrid
-        columns={{
-          sm: 1,
-          md: 2,
-          lg: 4,
-          xl: 6
-        }}
-      >
-        {
-          images.map((image, n) => <ImageItem key={n} image={image} />)
-        }
-      </SimpleGrid>
+      {
+        images.map((image, n) => <ImageItem key={n} image={image} />)
+      }
+    </SimpleGrid>
+  )
+}
+
+function AddCommentBox({book}) {
+  return (
+    <Box my={4} rounded={8}>
+      <Flex>
+        <Textarea
+          mr={4}
+          colorScheme="gray"
+          placeholder="Add comment"
+          rounded={8}
+          rows={2}
+        />
+        <Button
+          colorScheme="messenger"
+          w="20%"
+          rounded={30}
+        >Send</Button>
+      </Flex>
+    </Box>
+  )
+}
+
+function CommentsSection({book}) {
+  const { comments } = book
+  return (
+    <Box p={6}>
+      <Heading fontSize="2xl" color="gray.600">
+        Comments
+      </Heading>
+      <AddCommentBox book={book} />
+      {
+        comments &&
+        comments.map((comment, n) => <CommentElement key={n} comment={comment} />)
+      }
+    </Box>
+  )
+}
+
+function UserInfo({book}) {
+  const { author } = book
+  const { displayName, avatar } = author
+  return (
+    <Box>
+      <Text color="gray.500" fontSize="sm" mb={2}>Posted by</Text>
+      <Flex>
+        <Avatar
+          size="md"
+          src={avatar}
+          name={displayName}
+        />
+        <Box flex={1}>
+          <Text
+            my={2}
+            ml={4}
+            fontWeight="bold"
+            fontSize="lg"
+          >{displayName}</Text>
+        </Box>
+      </Flex>
+      <Divider my={4} />
+    </Box>
+  )
+}
+
+function InfoSection({book}) {
+  const { title, content } = book
+  return (
+    <Box>
+      <UserInfo book={book} />
+      <Heading>{title}</Heading>
+      <ReackMarkdown>
+        {content}
+      </ReackMarkdown>
     </Box>
   )
 }
 
 function BookContent({book}) {
-  const { title, content, comments } = book
   return (
     <Box p={6}>
-      <SimpleGrid
-        columns={{
-          sm: 1,
-          md: 2
-        }}
-      >
-        <Box>
-          <Heading fontSize="2xl" color="gray.600">Book</Heading>
-          <Heading>{title}</Heading>
-          <ReackMarkdown children={content} />
-        </Box>
-        <Box>
-          <Heading fontSize="2xl" color="gray.600">
-            Comments
-          </Heading>
-          {
-            comments &&
-            comments.map((comment, n) => <CommentElement key={n} comment={comment} />)
-          }
-        </Box>
-      </SimpleGrid>
+      <InfoSection book={book} />
     </Box>
   )
 }
@@ -131,13 +175,19 @@ export default function Book({book}) {
         <title>ImageBoard / {book.title}</title>
       </Head>
       <MainLayout>
-        <VStack>
-          <Container {...styles.contentBox} maxW="container.xl">
-            <ExpandableSection book={book} />
-            <Divider />
+        <SimpleGrid
+          rounded={8}
+          shadow="md"
+          columns={{ sm: 1, md: 2}}
+        >
+          <Box>
+            <BookImages book={book} />
+            <CommentsSection book={book} />
+          </Box>
+          <Box>
             <BookContent book={book} />
-          </Container>
-        </VStack>
+          </Box>
+        </SimpleGrid>
       </MainLayout>
     </>
   )

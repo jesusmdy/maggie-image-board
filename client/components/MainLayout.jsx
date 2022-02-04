@@ -11,16 +11,16 @@ export function Navbar() {
   return (
     <Box my={4} {...navbarStyles}>
       <Flex>
-        <Link href="/">
+        <Link href="/" passHref>
           <Heading display="block" fontSize="lg" as="a" p={4}>ImageBoard</Heading>
         </Link>
         <Spacer />
         <Box p={2}>
           <HStack>
-            <Link href="/auth/login">
+            <Link href="/auth/login" passHref>
               <Button as="a" variant="ghost">Sign In</Button>
             </Link>
-            <Link href="/auth/register">
+            <Link href="/auth/register" passHref>
               <Button as="a" colorScheme="red">Register</Button>
             </Link>
           </HStack>

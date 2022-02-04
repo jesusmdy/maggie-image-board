@@ -16,26 +16,24 @@ export default function BookCard({book, showLabel = true}) {
   const { displayName, avatar } = author
   const preview = images[0].smallCropped
   return (
-    <Link href={bookUrl}>
-      <a>
-        <Box position="relative" rounded={4} p={2} _hover={{ bgColor: "gray.50" }} >
-          {
-            nsfw &&
-            <Tag {...unsafeBadgeStyles}>NSFW</Tag>
-          }
-          <Img src={preview} rounded={8} />
-          {
-            showLabel &&
-            <>
-              <Text fontWeight="bold" isTruncated>{title}</Text>
-              <Flex my={2}>
-                <Avatar colorScheme="cyan" size="xs" src={avatar} name={displayName} />
-                <Text fontSize="sm" color="gray.600" ml={2} flex={1}>{displayName}</Text>
-              </Flex>
-            </>
-          }
-        </Box>
-      </a>
+    <Link href={bookUrl} passHref>
+      <Box as="a" position="relative" rounded={4} p={2} _hover={{ bgColor: "gray.50" }} >
+        {
+          nsfw &&
+          <Tag {...unsafeBadgeStyles}>NSFW</Tag>
+        }
+        <Img src={preview} rounded={8} />
+        {
+          showLabel &&
+          <>
+            <Text fontWeight="bold" isTruncated>{title}</Text>
+            <Flex my={2}>
+              <Avatar colorScheme="cyan" size="xs" src={avatar} name={displayName} />
+              <Text fontSize="sm" color="gray.600" ml={2} flex={1}>{displayName}</Text>
+            </Flex>
+          </>
+        }
+      </Box>
     </Link>
   )
 }
