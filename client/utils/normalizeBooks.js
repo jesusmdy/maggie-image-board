@@ -53,6 +53,7 @@ export function normalizeGQLBook(book) {
     content,
     images: _images,
     tags,
+    nsfw,
     user_created
   } = book
   const author = normalizeUser(user_created)
@@ -61,6 +62,7 @@ export function normalizeGQLBook(book) {
   return {
     id,
     bookUrl,
+    nsfw,
     title,
     content,
     images,

@@ -1,5 +1,6 @@
-import { Avatar, Box, Flex, Img, Tag, Text } from "@chakra-ui/react"
+import { Avatar, Box, Flex, Img, Tag, Text} from "@chakra-ui/react"
 import Link from "next/link"
+import { useRouter } from "next/router"
 
 const unsafeBadgeStyles = {
   position: 'absolute',
@@ -11,27 +12,62 @@ const unsafeBadgeStyles = {
   variant: 'solid'
 }
 
+function BookCardAuthorLabel({author}) {
+  const { displayName, avatar, id } = author
+  const router = useRouter()
+  const openProfilePage = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    router.push(`/user/${id}`)
+  }
+  return (
+    <>
+      <Flex
+        m={1}
+        p={1}
+        rounded={8}
+        _hover={{ bgColor: "gray.200" }}
+        position="relative"
+        onClick={openProfilePage}
+      >
+        <Avatar colorScheme="cyan" size="xs" src={avatar} name={displayName} />
+        <Text fontSize="sm" color="gray.600" ml={2} flex={1}>{displayName}</Text>
+      </Flex>
+    </>
+  )
+}
+
+function BookCardLabel({book}) {
+  const { title, author } = book
+  return (
+    <>
+      <Text p={2} fontWeight="bold" isTruncated>{title}</Text>
+      <BookCardAuthorLabel author={author} />
+    </>
+  )
+}
+
 export default function BookCard({book, showLabel = true}) {
-  const { id, images, title, author, nsfw, bookUrl } = book
-  const { displayName, avatar } = author
+  const { images, title, author, nsfw, bookUrl } = book
   const preview = images[0].smallCropped
   return (
     <Link href={bookUrl} passHref>
-      <Box as="a" position="relative" rounded={4} p={2} _hover={{ bgColor: "gray.50" }} >
+      <Box
+        as="a"
+        position="relative"
+        rounded={4}
+        _hover={{ bgColor: "gray.50" }}
+      >
         {
           nsfw &&
           <Tag {...unsafeBadgeStyles}>NSFW</Tag>
         }
-        <Img src={preview} rounded={8} />
+        <Box p={2}>
+          <Img src={preview} rounded={8} />
+        </Box>
         {
           showLabel &&
-          <>
-            <Text fontWeight="bold" isTruncated>{title}</Text>
-            <Flex my={2}>
-              <Avatar colorScheme="cyan" size="xs" src={avatar} name={displayName} />
-              <Text fontSize="sm" color="gray.600" ml={2} flex={1}>{displayName}</Text>
-            </Flex>
-          </>
+          <BookCardLabel book={book} />
         }
       </Box>
     </Link>

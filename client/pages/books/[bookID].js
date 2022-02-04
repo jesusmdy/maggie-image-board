@@ -13,14 +13,17 @@ import {
   Button,
   Textarea,
   Text,
-  Center,
-  Divider
+  Tag,
+  Divider,
+  HStack,
+  Wrap
 } from "@chakra-ui/react"
 import getBook from "apollo/getBook"
 import CommentElement from "components/CommentElement"
 import MainLayout from "components/MainLayout"
 import RecentWorks from "components/recentWorks"
 import Head from "next/head"
+import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import ReackMarkdown from "react-markdown"
 import styles from "styles/bookPage"
@@ -160,10 +163,37 @@ function InfoSection({book}) {
   )
 }
 
+function TagsSection({tags}) {
+  return (
+    <Box my={4}>
+      <Text color="gray.500" fontSize="sm" mb={2}>Tags</Text>
+      <HStack>
+        <Wrap>
+          {
+            tags.map((tag, n) => (
+              <Link href={`/tags/${tag}`} key={n} passHref>
+                <Tag
+                  as="a"
+                  mr={2}
+                >{tag}</Tag>
+              </Link>
+            ))
+          }
+        </Wrap>
+      </HStack>
+    </Box>
+  )
+}
+
 function BookContent({book}) {
+  const { tags } = book
   return (
     <Box p={6}>
       <InfoSection book={book} />
+      {
+        tags &&
+        <TagsSection tags={tags} />
+      }
     </Box>
   )
 }
