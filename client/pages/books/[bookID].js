@@ -216,6 +216,7 @@ export default function Book({book}) {
       <MainLayout>
         <SimpleGrid
           rounded={8}
+          my={4}
           columns={{ sm: 1, md: 2}}
           rows={{ sm: 2, md: 2 }}
         >

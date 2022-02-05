@@ -1,4 +1,5 @@
-import { createImageUrl } from './normalizeBooks'
+import { createImageUrl } from './normalizeImages'
+import { generateSizes } from './normalizeImages'
 const defaultAvatar = `https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png`
 
 export function normalizeUser(user) {
@@ -8,8 +9,12 @@ export function normalizeUser(user) {
     avatar: avatarFile,
     id,
     title,
-    description
+    description,
+    location,
+    header: headerID,
+    verified
   } = user
+  const header = generateSizes(headerID)
   const displayName = `${firstName} ${lastName}`
   const avatar = avatarFile
     ? createImageUrl(avatarFile.id, 'small')
@@ -23,6 +28,9 @@ export function normalizeUser(user) {
     lastName,
     avatar,
     title: title || '',
-    description: description || ''
+    description: description || '',
+    header,
+    location: location || '',
+    verified: verified || false
   }
 }

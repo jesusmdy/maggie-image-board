@@ -32,7 +32,7 @@ export function Navbar() {
     <Box {...navbarStyles}>
       <Flex maxW="container.xl" mx="auto" p={2}>
         <Link href="/" passHref>
-          <Heading display="block" fontSize="lg" as="a" p={4}>ImageBoard</Heading>
+          <Heading display="block" fontSize="lg" as="a" px={2} py={4}>ImageBoard</Heading>
         </Link>
         <Spacer />
         <SearchBox />
@@ -52,11 +52,12 @@ export function Navbar() {
   )
 }
 
-export default function MainLayout({children}) {
+export default function MainLayout({children, outside}) {
   return (
     <>
       <Navbar />
-      <Container maxW="container.xl" my={4}>
+      {outside}
+      <Container maxW="container.xl">
         {children}
       </Container>
     </>
