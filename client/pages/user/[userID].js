@@ -72,7 +72,7 @@ function UserContent({books, user}) {
           color="gray.600"
         >Books by {displayName}</Heading>
       </Box>
-      <SimpleGrid columns={{ sm: 2, md: 4, lg: 6 }} my={8} gap={4}>
+      <SimpleGrid columns={{ sm: 2, md: 4, lg: 4 }} my={8} gap={4}>
         {
           books.map((book, n) => (<BookCard key={n} book={book} />))
         }
@@ -94,8 +94,8 @@ function HeaderImage({header}) {
 }
 
 export default function UserPage({user, books}) {
-  const { header } = user
   if(!user) return <NotFound />
+  const { header } = user
   return (
     <>
       <Head>

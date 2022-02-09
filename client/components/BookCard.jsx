@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Divider, Flex, HStack, Icon, IconButton, Img, Tag, TagLabel, Text, VStack} from "@chakra-ui/react"
+import { Avatar, Box, Button, Divider, Flex, HStack, Icon, IconButton, Img, Spacer, Tag, TagLabel, Text} from "@chakra-ui/react"
 import Link from "next/link"
 import { GoVerified } from "react-icons/go"
 import {
@@ -8,7 +8,6 @@ import {
   IoShareSocialOutline
 } from "react-icons/io5"
 import { BiDotsHorizontalRounded } from "react-icons/bi"
-import { useEffect } from "react"
 import useTimeago from "hooks/useTimeago"
 
 function BookCardAuthorLabel({book}) {
@@ -58,26 +57,26 @@ function BookCardLabel({book}) {
 }
 
 const buttonStyle = {
-  variant: 'outline',
+  variant: 'ghost',
   size: 'sm',
-  w: 'full'
 }
 
 function BookActions() {
   return (
-    <HStack p={2} justifyContent="space-between">
-      <Button {...buttonStyle}>
+    <HStack p={2}>
+      <IconButton {...buttonStyle}>
         <Icon as={IoHeartOutline} />
-      </Button>
-      <Button {...buttonStyle}>
+      </IconButton>
+      <IconButton {...buttonStyle}>
         <Icon as={IoChatbubbleOutline} />
-      </Button>
-      <Button {...buttonStyle}>
+      </IconButton>
+      <IconButton {...buttonStyle}>
         <Icon as={IoBookmarkOutline} />
-      </Button>
-      <Button {...buttonStyle}>
+      </IconButton>
+      <Spacer />
+      <IconButton {...buttonStyle}>
         <Icon as={IoShareSocialOutline} />
-      </Button>
+      </IconButton>
     </HStack>
   )
 }

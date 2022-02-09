@@ -8,10 +8,12 @@ const query = gql`
       nsfw,
       content,
       tags,
+      date_created,
       user_created {
         id,
         first_name,
         last_name,
+        verified,
         avatar {
           id
         }

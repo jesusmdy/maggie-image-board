@@ -17,15 +17,21 @@ import {
   Divider,
   HStack,
   Wrap,
-  TagLabel
+  TagLabel,
+  VStack,
+  Icon,
+  TagLeftIcon
 } from "@chakra-ui/react"
 import getBook from "apollo/getBook"
 import CommentElement from "components/CommentElement"
 import MainLayout from "components/MainLayout"
 import RecentWorks from "components/recentWorks"
+import useTimeago from "hooks/useTimeago"
 import Head from "next/head"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
+import { BiHash } from "react-icons/bi"
+import { GoPlus, GoVerified } from "react-icons/go"
 import ReackMarkdown from "react-markdown"
 import styles from "styles/bookPage"
 
@@ -134,28 +140,45 @@ function CommentsSection({book}) {
 }
 
 function UserInfo({book}) {
-  const { author } = book
-  const { displayName, avatar } = author
+  const { author, createdAt } = book
+  const { displayName, avatar, verified, id } = author
   return (
-    <Box>
-      <Text color="gray.500" fontSize="sm" mb={2}>Posted by</Text>
-      <Flex>
-        <Avatar
-          size="md"
-          src={avatar}
-          name={displayName}
-        />
-        <Box flex={1}>
-          <Text
-            my={2}
-            ml={4}
-            fontWeight="bold"
-            fontSize="lg"
-          >{displayName}</Text>
-        </Box>
-      </Flex>
-      <Divider my={4} />
-    </Box>
+    <Link href={`/user/${id}`} passHref>
+      <Box as="a" display="block">
+        <Text color="gray.500" fontSize="sm" mb={2}>Posted by</Text>
+        <Flex>
+          <Avatar
+            size="md"
+            src={avatar}
+            name={displayName}
+          />
+          <Flex px={2} flexDir="column" flex={1}>
+            <HStack>
+              <Text
+                fontWeight="bold"
+                fontSize="lg"
+                _hover={{ textDecor: 'underline' }}
+              >{displayName}</Text>
+              {
+                verified &&
+                  <Icon color="blue.500" as={GoVerified} />
+              }
+              <Divider orientation="vertical" />
+              <Button
+                rightIcon={<Icon as={GoPlus} />}
+                colorScheme="blue"
+                variant="ghost"
+                size="sm"
+              >
+                <Text>Follow</Text>
+              </Button>
+            </HStack>
+            <Text color="gray.500" fontSize="xs">{useTimeago(new Date(createdAt))}</Text>
+          </Flex>
+        </Flex>
+        <Divider my={4} />
+      </Box>
+    </Link>
   )
 }
 
@@ -164,7 +187,7 @@ function InfoSection({book}) {
   return (
     <Box>
       <UserInfo book={book} />
-      <Heading>{title}</Heading>
+      <Heading fontSize="3xl">{title}</Heading>
       <ReackMarkdown>
         {content}
       </ReackMarkdown>
@@ -184,9 +207,9 @@ function TagsSection({tags}) {
                 <Tag
                   as="a"
                   mr={2}
-                  colorScheme="blue"
                   size="sm"
                 >
+                  <TagLeftIcon as={BiHash} />
                   <TagLabel>{tag}</TagLabel>
                 </Tag>
               </Link>
@@ -212,13 +235,13 @@ function BookContent({book}) {
 }
 
 export default function Book({book}) {
-  const { author } = book
-  const { id: userId } = author
   if (!book) return <MainLayout>Not found</MainLayout>
+  const { author } = book
+  const { id: userId, displayName } = author
   return (
     <>
       <Head>
-        <title>ImageBoard / {book.title}</title>
+        <title>ImageBoard / {book.title} by {displayName}</title>
       </Head>
       <MainLayout>
         <SimpleGrid
