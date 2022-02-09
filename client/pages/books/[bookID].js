@@ -71,7 +71,7 @@ function ImageItem({image}) {
 
 function BookImages({book}) {
   const { images } = book
-  return (
+  if(images.length > 1) return (
     <SimpleGrid
       m={6}
       gap={2}
@@ -85,6 +85,13 @@ function BookImages({book}) {
         images.map((image, n) => <ImageItem key={n} image={image} />)
       }
     </SimpleGrid>
+  )
+  return (
+    <Img
+      src={images[0].large}
+      w="full"
+      rounded={8}
+    />
   )
 }
 
@@ -218,7 +225,6 @@ export default function Book({book}) {
           rounded={8}
           my={4}
           columns={{ sm: 1, md: 2}}
-          rows={{ sm: 2, md: 2 }}
         >
           <Box
             bg="white"

@@ -1,4 +1,4 @@
-import { Box, Divider, Heading, HStack, SimpleGrid, Text, Wrap } from '@chakra-ui/react'
+import { Box, Heading, SimpleGrid, } from '@chakra-ui/react'
 import BookCard from 'components/BookCard'
 import MainLayout from 'components/MainLayout'
 import getBooks from 'apollo/getBooks'
@@ -31,7 +31,7 @@ export default function Index({books}) {
             sm: 2,
             md: 2,
             lg: 4,
-            xl: 6
+            xl: 4
           }}
           gap={4}
         >
