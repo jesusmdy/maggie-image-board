@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Divider, Flex, HStack, Icon, IconButton, Img, Spacer, Tag, TagLabel, Text} from "@chakra-ui/react"
+import { Avatar, Badge, Box, Button, Divider, Flex, HStack, Icon, IconButton, Img, Spacer, Tag, TagLabel, Text} from "@chakra-ui/react"
 import Link from "next/link"
 import { GoVerified } from "react-icons/go"
 import {
@@ -11,7 +11,7 @@ import { BiDotsHorizontalRounded } from "react-icons/bi"
 import useTimeago from "hooks/useTimeago"
 
 function BookCardAuthorLabel({book}) {
-  const { author, createdAt } = book
+  const { author, createdAt, nsfw } = book
   const { displayName, avatar, id, verified } = author
   return (
     <HStack w="full" p={2}>
@@ -28,6 +28,10 @@ function BookCardAuthorLabel({book}) {
         </Link>
       </Box>
       <Text fontSize="xs" isTruncated>{useTimeago(new Date(createdAt))}</Text>
+      {
+        nsfw &&
+        <Badge colorScheme="red">NSFW</Badge>
+      }
       <IconButton size="sm" variant="ghost">
         <Icon as={BiDotsHorizontalRounded} />
       </IconButton>
@@ -36,7 +40,7 @@ function BookCardAuthorLabel({book}) {
 }
 
 function BookCardLabel({book}) {
-  const { title, nsfw } = book
+  const { title } = book
   return (
     <HStack p={2}>
       <Text
@@ -46,12 +50,6 @@ function BookCardLabel({book}) {
         fontSize="sm"
         flex={1}
       >{title}</Text>
-      {
-        nsfw &&
-        <Tag colorScheme="red" size="sm">
-          <TagLabel fontWeight="bold">NSFW</TagLabel>
-        </Tag>
-      }
     </HStack>
   )
 }
@@ -92,18 +90,12 @@ export default function BookCard({book, showLabel = true}) {
       borderColor="gray.100"
       flexDirection="column"
     >
-      {
-        showLabel &&
-        <>
-          <BookCardAuthorLabel book={book} author={author} />
-          <Divider />
-        </>
-      }
       <Box flex={1} bg="gray.300" w="full">
         <Link href={bookUrl} passHref>
           <Box as="a" display="block" m={0} flex="1">
             <Img
               rounded={showLabel ? 0 : 8}
+              roundedTop={showLabel && 8}
               mx="auto"
               w="full"
               src={preview}
@@ -115,6 +107,7 @@ export default function BookCard({book, showLabel = true}) {
         showLabel &&
         <>
           <Divider />
+          <BookCardAuthorLabel book={book} author={author} />
           <BookCardLabel book={book} />
           <BookActions />
         </>

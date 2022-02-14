@@ -12,6 +12,7 @@ export function generateSizes(id) {
     small: createImageUrl(id, 'small'),
     smallCropped: createImageUrl(id, 'small-cropped'),
     medium: createImageUrl(id, 'medium'),
+    mediumVertical: createImageUrl(id, 'medium-vertical'),
     mediumCropped: createImageUrl(id, 'medium-cropped'),
     large: createImageUrl(id, 'large'),
     original: createImageUrl(id)

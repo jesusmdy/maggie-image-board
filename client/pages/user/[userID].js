@@ -1,9 +1,9 @@
 import { Avatar, Box, Center, Divider, Flex, Heading, Icon, Img, SimpleGrid, Text, VStack } from '@chakra-ui/react'
 import getBooks from 'apollo/getBooks'
-import BookCard from 'components/BookCard'
+import BookCard from 'components/bookCard'
 import { FiBriefcase, FiMapPin, FiEdit3 } from 'react-icons/fi'
 import { GoVerified } from 'react-icons/go'
-import MainLayout from 'components/MainLayout'
+import MainLayout from 'components/mainlayout'
 import absoluteUrl from 'next-absolute-url'
 import Head from 'next/head'
 

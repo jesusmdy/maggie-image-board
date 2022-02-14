@@ -1,33 +1,23 @@
-import { Box, Heading, SimpleGrid, } from '@chakra-ui/react'
-import BookCard from 'components/bookCard'
+import { Box, Heading, SimpleGrid, Img, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, VStack, HStack, IconButton, Icon, Divider } from '@chakra-ui/react'
 import MainLayout from 'components/mainlayout'
 import getBooks from 'apollo/getBooks'
 import Head from 'next/head';
-import BooksMasonry from 'components/booksMasonry';
+import { withRouter } from 'next/router'
 
-const styles = {
-  headingBoxStyle: {
-    py: 8
-  },
-  headingStyle: {
-    userSelect: 'none',
-    fontWeight: 'light',
-    color: 'gray.500'
-  }
-}
+import BooksMasonry from 'components/booksMasonry'
 
-export default function Index({books}) {
+function Index({books}) {
+  
   if(!books) return <NoPosts />
   return (
     <>
       <Head>
-        <title>ImageBoard / Images</title>
+        <title>ImageBoard / Books</title>
       </Head>
       <MainLayout>
-        <Box {...styles.headingBoxStyle}>
-          <Heading {...styles.headingStyle}>Recent books for you</Heading>
+        <Box my={6}>
+          <BooksMasonry asModal={true} books={books} />
         </Box>
-        <BooksMasonry books={books} asModal={true} />
       </MainLayout>
     </>
   )
@@ -40,6 +30,8 @@ function NoPosts() {
     </MainLayout>
   )
 }
+
+export default withRouter(Index)
 
 export async function getServerSideProps(context) {
   try {

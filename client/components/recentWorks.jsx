@@ -2,7 +2,7 @@ import { Box, Flex, HStack, SimpleGrid, Text } from '@chakra-ui/react'
 import getBooks from 'apollo/getBooks'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import BookCard from './BookCard'
+import BookCard from './bookCard'
 
 function Title({userId}) {
   return (

@@ -23,8 +23,8 @@ import {
   TagLeftIcon
 } from "@chakra-ui/react"
 import getBook from "apollo/getBook"
-import CommentElement from "components/CommentElement"
-import MainLayout from "components/MainLayout"
+import CommentElement from "components/commentElement"
+import MainLayout from "components/mainlayout"
 import RecentWorks from "components/recentWorks"
 import useTimeago from "hooks/useTimeago"
 import Head from "next/head"
@@ -75,7 +75,7 @@ function ImageItem({image}) {
   )
 }
 
-function BookImages({book}) {
+export function BookImages({book}) {
   const { images } = book
   if(images.length > 1) return (
     <SimpleGrid
@@ -139,7 +139,7 @@ function CommentsSection({book}) {
   )
 }
 
-function UserInfo({book}) {
+export function UserInfo({book}) {
   const { author, createdAt } = book
   const { displayName, avatar, verified, id } = author
   return (
@@ -182,7 +182,7 @@ function UserInfo({book}) {
   )
 }
 
-function InfoSection({book}) {
+export function InfoSection({book}) {
   const { title, content } = book
   return (
     <Box>
