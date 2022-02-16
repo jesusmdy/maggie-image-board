@@ -1,9 +1,12 @@
-import { Box, Heading, SimpleGrid, } from '@chakra-ui/react'
-import BookCard from 'components/bookCard'
+import { Box, Heading, Text} from '@chakra-ui/react'
 import MainLayout from 'components/mainlayout'
-import getBooks from 'apollo/getBooks'
 import Head from 'next/head';
-import BooksMasonry from 'components/booksMasonry';
+import BooksMasonry from 'components/booksMasonry'
+import { useQuery } from '@apollo/client'
+import BOOKS_QUERY from 'apollo/queries/previews'
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { normalizePreviews } from 'utils/normalizePreviews'
 
 const styles = {
   headingBoxStyle: {
@@ -16,12 +19,39 @@ const styles = {
   }
 }
 
-export default function Index({books}) {
-  if(!books) return <NoPosts />
+function Loading() {
   return (
     <>
       <Head>
-        <title>ImageBoard / Images</title>
+        <title>{process.env.NEXT_PUBLIC_APP_NAME} / Loading...</title>
+      </Head>
+      <MainLayout>
+        <Text fontSize="lg">Loading...</Text>
+      </MainLayout>
+    </>
+  )
+}
+
+export default function Index() {
+  const [books, setBooks] = useState([])
+  const { loading, error, data } = useQuery(BOOKS_QUERY, {
+    variables: {
+      page: 1,
+      sort: ['-date_created'],
+      filter: {},
+      limit: 20
+    }
+  })
+  useEffect(() => {
+    !loading && !error & setBooks(normalizePreviews(data.book))
+  }, [loading, error, data])
+  if(loading) return <Loading />
+  if(!books) return <NoPosts />
+  if(error) return <Box>Error</Box>
+  return (
+    <>
+      <Head>
+        <title>{process.env.NEXT_PUBLIC_APP_NAME} / Images</title>
       </Head>
       <MainLayout>
         <Box {...styles.headingBoxStyle}>
@@ -39,17 +69,4 @@ function NoPosts() {
       <Heading p={8}>No posts</Heading>
     </MainLayout>
   )
-}
-
-export async function getServerSideProps(context) {
-  try {
-    const books = await getBooks({})
-    return {
-      props: {books}
-    }
-  } catch(e) {
-    return {
-      props: {}
-    }
-  }
 }

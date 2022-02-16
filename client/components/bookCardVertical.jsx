@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { withRouter } from 'next/router'
 import { GoPlus } from 'react-icons/go'
 import { useContextualRouting } from 'next-use-contextual-routing'
+import { useEffect } from 'react'
 
 const bookActionsStyles = {
   position: 'absolute',
@@ -32,8 +33,7 @@ function BookActions({book, isHover}) {
 
 function BookCardVertical({book, asModal = true, router}) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { images, bookUrl, id } = book
-  const preview = images[0].mediumVertical
+  const { bookUrl, id, mediumVertical } = book
   const { makeContextualHref, returnHref } = useContextualRouting()
   const handleRoute = (e) => {
     if(asModal) {
@@ -55,7 +55,7 @@ function BookCardVertical({book, asModal = true, router}) {
       <BookActions book={book} isHover={isOpen} />
       <Link href={bookUrl} passHref>
         <Box as="a" onClick={handleRoute}>
-          <Img src={preview} rounded={16} />
+          <Img src={mediumVertical} rounded={16} />
         </Box>
       </Link>
     </Box>
